@@ -1,0 +1,36 @@
+# Visual Studio / C++
+*.sln
+*.vcxproj
+*.user
+.vs/
+Debug/
+Release/
+x64/
+*.pdb
+*.obj
+*.log
+
+# Unreal Engine
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vscode/
+.ignore
+*.xcworkspace
+
+# Unity
+[Library]/
+[Temp]/
+[Obj]/
+[Build]/
+[Logs]/
+[MemoryCaptures]/
+UserSettings/
+*.csproj
+*.unitypackage.meta
+
+# OS Specific
+.DS_Store
+Thumbs.db
