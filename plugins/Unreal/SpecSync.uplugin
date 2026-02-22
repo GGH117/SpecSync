@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "SpecSync Agent",
+	"Description": "Open-source AI-driven performance optimization and telemetry agent.",
+	"Category": "Performance",
+	"CreatedBy": "Atharv Swaroop",
+	"CreatedByURL": "https://github.com/YourUsername/SpecSync",
+	"DocsURL": "https://github.com/YourUsername/SpecSync/tree/main/docs",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/YourUsername/SpecSync/issues",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SpecSync",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault"
+		}
+	]
+}
