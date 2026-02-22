@@ -1,6 +1,6 @@
 SpecSync
 
-SpecSync is an open-source, AI-driven performance optimization agent for PC games. It helps to bridge the gap between the user's PC and a game's rendering requirments by adjusting settings in real-time to maintain stable frame rates and prevent thermal throttling.
+SpecSync is an open-source, AI-driven performance optimization agent for PC games. It helps to bridge the gap between the user's PC and a game's rendering reqiurments by adjusting settings in real-time to maintain stable frame rates and prevent thermal throttling.
 
 Core Features
 * Hardware & Bottleneck Detection: Scans CPU, GPU, RAM, and SSD/Hard drive speeds to generate a baseline hardware profile.
