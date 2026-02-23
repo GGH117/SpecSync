@@ -1,0 +1,6 @@
+-xc++
+-std=c++17
+-Isrc/HardwareScanner/include
+-Isrc/Telemetry/include
+-Iplugins/Unreal/Source/Public
+-D_CRT_SECURE_NO_WARNINGS
