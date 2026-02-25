@@ -17,7 +17,7 @@ Core Features
 
 ---
 
-## System Architecture: The Library Model
+System Architecture: The Library Model
 
 SpecSync is now an **In-Process Library**, removing the need for a separate SpecSync-Core process.
 
@@ -27,9 +27,9 @@ SpecSync is now an **In-Process Library**, removing the need for a separate Spec
 
 ---
 
-## Engine Integration
+Engine Integration
 
-### Unreal Engine (Native Module)
+Unreal Engine (Native Module)
 
 SpecSync integrates as an **Unreal Engine Subsystem**, allowing it to initialize automatically with the game engine.
 
