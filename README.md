@@ -15,21 +15,15 @@ Core Features
 * **Thermal Guardrails:** A compiled-in safety module that aggressively downscales post-processing if hardware sensors report temperatures exceeding user-defined safe zones.
 * **In-Game Performance Chatbot:** An optional UI module (ImGui or UMG/UI Toolkit) that allows players to ask, *"Why is my frame rate dipping?"* and receive real-time explanations from the agent.
 
----
 
 System Architecture: The Library Model
-
-SpecSync is now an **In-Process Library**, removing the need for a separate SpecSync-Core process.
-
 1. **SpecSync-Runtime (The Core):** A lightweight C++ library linked to your game. It handles the "Optimization Loop" on a dedicated worker thread to avoid impacting the game's main logic.
 2. **Abstraction Layer:** Standardized interfaces that translate SpecSync decisions into engine-specific commands (e.g., r.ScreenPercentage in Unreal or QualitySettings in Unity).
 3. **The Registry:** A developer-facing API where you "register" which variables SpecSync is allowed to touch.
 
----
-
 Engine Integration
 
-Unreal Engine (Native Module)
+Unreal Engine
 
 SpecSync integrates as an **Unreal Engine Subsystem**, allowing it to initialize automatically with the game engine.
 
@@ -44,7 +38,7 @@ Utilizes a C++ native plugin with a high-performance C# wrapper to minimize garb
 2. Drop the SpecSyncAgent component into your initial loading scene.
 3. SpecSync interfaces directly with **URP/HDRP Volume Profiles**, allowing the AI to adjust effects like Bloom, DOF, and Fog density dynamically.
 
-The Strategy Pattern (C++ Example)
+The Strategy Pattern
 
 Developers can define "Performance Profiles" using a simple Strategy Pattern. This example demonstrates a strategy designed to prevent VRAM overflow:
 
