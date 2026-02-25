@@ -1,64 +1,66 @@
 SpecSync
 
-SpecSync is an open-source, AI-driven performance optimization agent for PC games. It helps to bridge the gap between the user's PC and a game's rendering reqiurments by adjusting settings in real-time to maintain stable frame rates and prevent thermal throttling.
+The Native, AI-Driven Performance Framework for Games
+
+SpecSync is an open-source, header-only C++ framework designed to be compiled directly into your game. It acts as an **in-process performance engineer**, bridging the gap between hardware constraints and software demands by adjusting engine parameters in real-time.
+
+By moving SpecSync inside the game binary, it gains low-latency access to the render thread and eliminates the need for users to install external background utilities.
+
 
 Core Features
-* Hardware & Bottleneck Detection: Scans CPU, GPU, RAM, and SSD/Hard drive speeds to generate a baseline hardware profile.
-* Real-Time Telemetry: Monitors FPS, CPU and GPU utilization, and hardware temps.
-* Dynamic Optimization Engine: Automatically scales texture pools, volumetric fog, shadow resolution, and AI upscaling like Nvidia's DLSS and AMD's FSR based on real-time VRAM availability and FPS targets.
-* Thermal-Safe Overrides: Hardcoded safety layer that immediately reduces post-processing if GPU temperatures exceed safe thresholds set by the user.
-* Natural Language Chatbot: Built-in conversational UI allowing players to query why settings were changed or request specific optimizations without navigating complex menus.
-* Drop-in Engine Plugins: Native integrations for Unreal Engine in C++ and Unity C#, allowing game devs expose their rendering settings to the SpecSync Agent with minimal setup.
 
+* **Integrated Telemetry:** Polls hardware metrics (CPU/GPU load, VRAM, and thermals) directly via OS-native APIs (DXGI, Vulkan, or NVAPI) without external hooks.
+* **Predictive Scaling:** Uses an internal decision tree to scale texture streaming pools, volumetric effects, and AI upscaling (DLSS/FSR/XeSS) based on the current frame budget.
+* **Zero-Latency Feedback:** Because it lives in the engine, adjustments happen within the same frame or the next, preventing the "stutter-correction-stutter" loop common in external tools.
+* **Thermal Guardrails:** A compiled-in safety module that aggressively downscales post-processing if hardware sensors report temperatures exceeding user-defined safe zones.
+* **In-Game Performance Chatbot:** An optional UI module (ImGui or UMG/UI Toolkit) that allows players to ask, *"Why is my frame rate dipping?"* and receive real-time explanations from the agent.
 
+---
 
-System Architecture
+## System Architecture: The Library Model
 
-SpecSync is mode based which means it separates the monitoring logic from the game engine hooks.
+SpecSync is now an **In-Process Library**, removing the need for a separate SpecSync-Core process.
 
-1. SpecSync-Core: A lightweight background process that polls the OS for hardware metrics and executes the optimization decision tree.
-2. SpecSync-UI: The frontend interface where users interact with the Agent.
-3. Plugins: Standardized APIs that sit inside the game engine, receiving commands from the Agent and modifying UGameUserSettings in Unreal or QualitySettings in Unity.
+1. **SpecSync-Runtime (The Core):** A lightweight C++ library linked to your game. It handles the "Optimization Loop" on a dedicated worker thread to avoid impacting the game's main logic.
+2. **Abstraction Layer:** Standardized interfaces that translate SpecSync decisions into engine-specific commands (e.g., r.ScreenPercentage in Unreal or QualitySettings in Unity).
+3. **The Registry:** A developer-facing API where you "register" which variables SpecSync is allowed to touch.
 
+---
 
+## Engine Integration
 
-For Game Devs: Engine Integration
+### Unreal Engine (Native Module)
 
-Integrating SpecSync into your game allows your it to dynamically scale to any user's PC automatically.
+SpecSync integrates as an **Unreal Engine Subsystem**, allowing it to initialize automatically with the game engine.
 
-Unreal Engine Quickstart
+1. Add the SpecSync module to your Source/ folder and include it in your .Build.cs.
+2. The USpecSyncSubsystem automatically hooks into URendererSettings.
+3. **Custom Hooks:** Implement the ISpecSyncControllable interface on any Actor or Component to let the AI tune custom gameplay parameters (like NPC density or Draw Distance).
 
-1. Drop the SpecSyncPlugin folder into your project's Plugins/ directory.
-2. Enable the plugin in your .uproject file.
-3. SpecSync automatically hooks into URendererSettings. To add custom game-specific overrides, implement the ISpecSyncReceiver interface on your GameMode or PlayerController.
+Unity
+Utilizes a C++ native plugin with a high-performance C# wrapper to minimize garbage collection.
 
-Unity Quickstart
+1. Import the SpecSync package into your Packages/ directory.
+2. Drop the SpecSyncAgent component into your initial loading scene.
+3. SpecSync interfaces directly with **URP/HDRP Volume Profiles**, allowing the AI to adjust effects like Bloom, DOF, and Fog density dynamically.
 
-1. Import the SpecSync.unitypackage.
-2. Add the SpecSyncManager MonoBehaviour to your persistent boot scene.
-3. SpecSync will automatically interface with Unity's QualitySettings and GraphicsSettings APIs. You can preview SpecSync's AI decisions directly inside the Unity Editor via the custom Inspector window.
+The Strategy Pattern (C++ Example)
 
+Developers can define "Performance Profiles" using a simple Strategy Pattern. This example demonstrates a strategy designed to prevent VRAM overflow:
 
-The Strategy Pattern
-
-SpecSync uses a Strategy Pattern for its optimization logic. Modders and developers can write custom "Optimization Strategies" without modifying the core telemetry loop.
-
-Example of a custom strategy checking VRAM:
-
-python
- Pseudocode representation of a SpecSync Strategy
-if available_vram < VRAM_SAFETY_BUFFER_MB:
-    Log("VRAM Warning. Reducing Texture Streaming Pool.")
-    GameConnector.set_parameter("TextureQuality", "Medium")
-    GameConnector.flush_render_cache()
-
+void VRAMSafetyStrategy::Execute(SpecSyncContext& Context) {
+    if (Context.GetAvailableVRAM() < 512) { //MB
+        Log("VRAM critical. Downscaling textures.");
+        Context.SetSetting("TextureQuality", Quality::Medium);
+        Context.SetSetting("VRS_Enabled", true); // Variable Rate Shading
+        Context.FlushRenderCommands();
+    }
+}
 
 Contributing
 
-SpecSync is 100% Open Source and community-driven. We are looking for contributors in the following areas:
+SpecSync is 100% Open Source. We are currently looking for help in these "Embedded-First" areas:
 
-* Hardware Profiling: Adding accurate baseline profiles for legacy GPUs (Like GTX 10 series cards and RX 500 series cards).
-* Engine Programmers: Expanding the Unreal and Unity plugins to support specific rendering pipelines (e.g., Unity HDRP vs URP).
-* Data Scientists: Helping refine the default optimization decision trees based on community telemetry data.
-
-Please read the [CONTRIBUTING.md]() for details on the code of conduct, and the process for submitting pull requests.
+* **Platform Shims:** Writing telemetry collectors for Linux/Steam Deck and macOS (Metal).
+* **Shader Compilers:** Developing logic to delay certain effects until shaders have finished background compilation to prevent "compilation stutter."
+* **Math Optimization:** Refining the AI decision tree to run in under $0.5ms$ per frame.
