@@ -1,7 +1,7 @@
 
 # Contributing to SpecSync
 
-First off, thank you for taking the time to contribute! By helping with SpecSync, you are helping game developers ensure their art runs smoothly on every gamer's machine, from high-end rigs to handhelds like the Steam Deck.
+First off, thank you for taking the time to contribute! By helping with SpecSync, you are helping game developers ensure their game runs smoothly on any gamer's device, from high-end PCs to handhelds like the Steam Deck.
 
 As an embedded framework, our priority is Zero Impact. SpecSync should never be the reason a game stutters.
 
@@ -28,7 +28,7 @@ We need experts to deepen the integration with modern pipelines:
 
 Helping us refine the Optimization Decision Tree. If $FPS < Target$, which setting should be dropped first? We need data-driven insights to determine which settings provide the most Performance-per-Visual-Pixel.
 
-## 💻 Development Workflow
+## Development Workflow
 
 ### 1. Local Setup
 
@@ -59,7 +59,7 @@ We are committed to fostering a welcoming and collaborative community.
 
 * **Be Respectful:** We are all here to build cool tech.
 * **Constructive Feedback:** Critique the code, not the programmer.
-* **Safety First:** Any code that could potentially cause hardware instability (e.g., uncontrolled overvolting) will be rejected immediately.
+* **Safety First:** Any code that could potentially cause hardware instability (e.g., uncontrolled overvolting) must be reported and will be rejected immediately.
 
 
 
@@ -67,6 +67,5 @@ We are committed to fostering a welcoming and collaborative community.
 
 * **Issues:** For bug reports or feature requests, use the GitHub Issues tab.
 * **Discussions:** Join our Discord for real-time architecture chats.
-* **Security:** If you find a vulnerability, please email security@specsync.dev instead of opening a public issue.
-
-**Ready to start?** Check out the [Good First Issues](https://www.google.com/search?q=https://github.com/SpecSync/SpecSync-Embedded/labels/good%2520first%2520issue) label!
+* **Security:** If you find a vulnerability, please email me at atharvswaroop@gmail.com instead of opening a public issue.
+If your ready start please join the discord for announcements!
