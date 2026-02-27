@@ -58,3 +58,5 @@ SpecSync is 100% Open Source. We are currently looking for help in these "Embedd
 * **Platform Shims:** Writing telemetry collectors for Linux/Steam Deck and macOS (Metal).
 * **Shader Compilers:** Developing logic to delay certain effects until shaders have finished background compilation to prevent "compilation stutter."
 * **Math Optimization:** Refining the AI decision tree to run in under $0.5ms$ per frame.
+
+Read the [CONTRIBUTING.md] for more information on how to contibute.
