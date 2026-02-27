@@ -32,7 +32,7 @@ Helping us refine the Optimization Decision Tree. If $FPS < Target$, which setti
 
 ### 1. Local Setup
 
-1. **Clone the Repo:** git clone https://github.com/SpecSync/SpecSync-Embedded.git
+1. **Clone the Repo:** git clone [https://github.com/SpecSync/SpecSync-Embedded.git](https://github.com/GGH117/SpecSync.git)
 2. **Submodules:** This project uses submodules for certain hardware APIs. Run git submodule update --init --recursive.
 3. **Build:** We use **CMake**. Ensure you have a C++20 compliant compiler.
 
