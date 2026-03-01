@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
     #include <windows.h>
-    #include <dxgi1_4.h> // <--- This is the key to fixing the IDXGIAdapter3 errors
+    #include <dxgi1_4.h>
     #pragma comment(lib, "dxgi.lib")
 #endif
 

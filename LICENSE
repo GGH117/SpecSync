@@ -1,21 +1,31 @@
-MIT License
+Business Source License 1.1
 
-Copyright (c) 2026 [SpecSync]
+Parameters:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+- Licensor: [Atharv Swaroop]
+- Licensed Work: SpecSync Optimization Engine (including C++ core, 
+                 Telemetry modules, and Python Bridge)
+- Change Date: 2029-01-01
+- Change License: Apache License, Version 2.0
+- Additional Use Grant: Non-commercial use, educational use, and 
+                        individual game development use (where 
+                        annual revenue is less than $50,000 USD) 
+                        is permitted without a paid license.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+----------------------------------------------------------------------
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Copyright © 2026 [Atharv Swaroop]. All rights reserved.
+
+The Licensor hereby grants you the right to copy, modify, create 
+derivative works, redistribute, and make non-production use of the 
+Licensed Work. The Licensor may make an Additional Use Grant above.
+
+You may make production use of the Licensed Work only as permitted by 
+the Additional Use Grant, or by a separate agreement with Licensor.
+
+All copies of the Licensed Work and any portion of it, and any 
+derivative works, must contain this license and its copyright notice.
+
+On the Change Date, or in connection with a specific milestone as 
+set forth by the Licensor, this License shall convert to the Change 
+License.

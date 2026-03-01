@@ -1,30 +1,40 @@
-#include "../../include/Telemetry.h"
-#include <string>
+#include "../../include/SpecSyncTypes.h"
+#include <vector>
 
 namespace SpecSync {
 
-    struct OptimizationAction {
-        std::string TargetSetting;
-        float AdjustmentValue;
-        std::string MessageForChatbot;
-    };
-
     class OptimizationEngine {
+    private:
+        float m_AccumulatedTime = 0.0f;
+        const float m_ActionDelay = 2.0f; 
+        float m_CurrentScale = 1.0f;
+
     public:
-        OptimizationAction Analyze(const FrameData& data) {
-            // Everything is fine
-            OptimizationAction action = {"NONE", 1.0f, "System performance is optimal."};
+        // Use the vector of OptimizationCommand defined in SpecSyncTypes.h
+        std::vector<OptimizationCommand> Process(const FrameData& data, float dt) {
+            std::vector<OptimizationCommand> commands;
 
-            // If VRAM is critical under 500MB
-            if (data.AvailableVRAM < 500) {
-                action = {"TextureQuality", 0.5f, "VRAM is nearly full. I've optimized texture streaming."};
+            if (data.CurrentFPS < 57.0f && m_CurrentScale > 0.65f) {
+                m_AccumulatedTime += dt;
+                if (m_AccumulatedTime >= m_ActionDelay) {
+                    m_CurrentScale -= 0.05f;
+                    commands.push_back({Setting::ResolutionScale, m_CurrentScale});
+                    m_AccumulatedTime = 0.0f;
+                }
+            } 
+            else if (data.CurrentFPS > 75.0f && m_CurrentScale < 1.0f) {
+                m_AccumulatedTime += dt;
+                if (m_AccumulatedTime >= m_ActionDelay) {
+                    m_CurrentScale += 0.05f;
+                    commands.push_back({Setting::ResolutionScale, m_CurrentScale});
+                    m_AccumulatedTime = 0.0f;
+                }
             }
-            // If FPS is dipping below a target
-            else if (data.CurrentFPS < 55.0f) {
-                action = {"ResolutionScale", 0.85f, "FPS dropped. I'm scaling resolution to keep things smooth."};
+            else {
+                m_AccumulatedTime = 0.0f;
             }
 
-            return action;
+            return commands;
         }
     };
 }
