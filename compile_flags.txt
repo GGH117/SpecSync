@@ -1,6 +1,31 @@
+# Language Standard
+-std=c++20
+
+# Treat all files as C++
 -xc++
--std=c++17
--Isrc/HardwareScanner/include
--Isrc/Telemetry/include
--Iplugins/Unreal/Source/Public
+
+# Include Directories
+-Iinclude
+-Isrc/Telemetry
+-Isrc/HardwareScanner
+-Isrc/OptimizationEngine
+
+-I/C:/Users/Hextral/AppData/Local/Programs/Python/Python311/include
+-I/C:/Users/Hextral/Desktop/GDev/Projects/iNFiLTRATiON/SpecSync/extern/pybind11/include
+-std=c++20
+-D_WIN32
+-D_UNICODE
+-DUNICODE
+
+# Common Warnings
+-Wall
+-Wextra
+
+# Windows Definitions (Enable these if developing on Windows)
+-D_WIN32
+-D_UNICODE
+-DUNICODE
 -D_CRT_SECURE_NO_WARNINGS
+
+# Linux/Vulkan (Optional: if headers are in a non-standard path)
+# -I/usr/include/vulkan
