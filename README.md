@@ -51,9 +51,9 @@ Licensing
 
 SpecSync is licensed under the **Business Source License 1.1**. 
 
-* [cite_start]**Individual & Non-Commercial Use:** Use is free for educational purposes, non-commercial projects, and individual developers/studios with annual revenue under $50,000 USD[cite: 2].
-* [cite_start]**Commercial Use:** Production use for entities exceeding the revenue threshold requires a separate agreement with the Licensor[cite: 4].
-* [cite_start]**Open Source Conversion:** On **January 1, 2029**, the license for this version of the software will automatically convert to the **Apache License, Version 2.0**.
+* **Individual & Non-Commercial Use:** Use is free for educational purposes, non-commercial projects, and individual developers/studios with annual revenue under $50,000 USD[cite: 2].
+* **Commercial Use:** Production use for entities exceeding the revenue threshold requires a separate agreement with the Licensor[cite: 4].
+* **Open Source Conversion:** On **January 1, 2029**, the license for this version of the software will automatically convert to the **Apache License, Version 2.0**.
 
 For full details, please see the [LICENSE] file.
 
