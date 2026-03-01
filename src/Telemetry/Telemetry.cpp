@@ -1,66 +1,75 @@
-#include "../../include/Telemetry.h" 
+#include "../../include/Telemetry.h"
+#include <dxgi1_4.h>
+#include <wrl.h> 
+#include <pdh.h>
 #include <numeric>
 
-#ifdef _WIN32
-    #include <windows.h>
-    #include <dxgi1_4.h>
-    #pragma comment(lib, "dxgi.lib")
-#endif
+using Microsoft::WRL::ComPtr;
+
+// Static handles for the CPU query
+static PDH_HQUERY cpuQuery;
+static PDH_HCOUNTER cpuTotal;
 
 namespace SpecSync {
 
-    Telemetry::Telemetry() 
-        : TimeSinceLastGpuQuery(0.0f) {
-        CurrentFrame = {};
+    Telemetry::Telemetry() : TimeSinceLastGpuQuery(0.0f) {
+        CurrentFrame = {0.0f, 0.0f, 0.0f, 0.0f, 0};
+        
+        // Initialize PDH for CPU tracking
+        PdhOpenQuery(NULL, NULL, &cpuQuery);
+        PdhAddEnglishCounter(cpuQuery, L"\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal);
+        PdhCollectQueryData(cpuQuery);
     }
 
-    Telemetry::~Telemetry() {}
+    Telemetry::~Telemetry() {
+        PdhCloseQuery(cpuQuery);
+    }
 
-    void Telemetry::Tick(float DeltaTime) {
-        CurrentFrame.DeltaTime = DeltaTime;
-        
-        // Calculate FPS (Safety check for Arithmatic Exception)
-        CurrentFrame.CurrentFPS = (DeltaTime > 0.0f) ? (1.0f / DeltaTime) : 0.0f;
-
-        // Keep a small history for averaging
-        FpsHistory.push_back(CurrentFrame.CurrentFPS);
-        if (FpsHistory.size() > 120) {
-            FpsHistory.erase(FpsHistory.begin());
+    void Telemetry::Tick(float dt) {
+        CurrentFrame.DeltaTime = dt;
+        if (dt > 0.0f) {
+            float currentFps = 1.0f / dt;
+            FpsHistory.push_back(currentFps);
+            if (FpsHistory.size() > 60) FpsHistory.erase(FpsHistory.begin());
+            CurrentFrame.CurrentFPS = GetAverageFPS();
         }
 
-        // Throttle hardware-intensive calls as to not hammer the GPU driver
-        TimeSinceLastGpuQuery += DeltaTime;
+        TimeSinceLastGpuQuery += dt;
         if (TimeSinceLastGpuQuery >= GpuQueryInterval) {
             UpdateHardwareStats();
             TimeSinceLastGpuQuery = 0.0f;
         }
     }
 
-    float Telemetry::GetAverageFPS(int WindowSize) const {
-        if (FpsHistory.empty()) return 0.0f;
-        
-        size_t actualSize = (FpsHistory.size() < (size_t)WindowSize) ? FpsHistory.size() : (size_t)WindowSize;
-        float sum = std::accumulate(FpsHistory.end() - actualSize, FpsHistory.end(), 0.0f);
-        return sum / static_cast<float>(actualSize);
-    }
-
-void Telemetry::UpdateHardwareStats() {
-#ifdef _WIN32
-        IDXGIFactory4* pFactory = nullptr;
-        if (SUCCEEDED(CreateDXGIFactory1(__uuidof(IDXGIFactory4), (void**)&pFactory))) {
-            IDXGIAdapter3* pAdapter3 = nullptr;
-            // Get the first adapter
-            if (SUCCEEDED(pFactory->EnumAdapters(0, (IDXGIAdapter**)&pAdapter3))) {
-                DXGI_QUERY_VIDEO_MEMORY_INFO memInfo;
-                // Query local VRAM
-                if (SUCCEEDED(pAdapter3->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo))) {
-                    CurrentFrame.AvailableVRAM = (memInfo.Budget - memInfo.CurrentUsage) / (1024 * 1024);
+    void Telemetry::UpdateHardwareStats() {
+        // GPU Stats via DXGI
+        ComPtr<IDXGIFactory4> factory;
+        if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(&factory)))) {
+            ComPtr<IDXGIAdapter1> adapter;
+            if (SUCCEEDED(factory->EnumAdapters1(0, &adapter))) {
+                ComPtr<IDXGIAdapter3> adapter3;
+                if (SUCCEEDED(adapter.As(&adapter3))) {
+                    DXGI_QUERY_VIDEO_MEMORY_INFO memInfo;
+                    if (SUCCEEDED(adapter3->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo))) {
+                        CurrentFrame.AvailableVRAM = (memInfo.Budget - memInfo.CurrentUsage) / 1024 / 1024;
+                        CurrentFrame.GpuUsage = ((float)memInfo.CurrentUsage / (float)memInfo.Budget) * 100.0f;
+                    }
                 }
-                pAdapter3->Release();
             }
-            pFactory->Release();
         }
-#endif
+
+        // CPU Stats via PDH
+        PDH_FMT_COUNTERVALUE counterVal;
+        PdhCollectQueryData(cpuQuery);
+        PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_DOUBLE, NULL, &counterVal);
+        CurrentFrame.CpuUsage = (float)counterVal.doubleValue;
     }
 
+    float Telemetry::GetAverageFPS() const {
+        if (FpsHistory.empty()) return 0.0f;
+        float sum = std::accumulate(FpsHistory.begin(), FpsHistory.end(), 0.0f);
+        return sum / FpsHistory.size();
+    }
+
+    FrameData Telemetry::GetLatestData() const { return CurrentFrame; }
 }

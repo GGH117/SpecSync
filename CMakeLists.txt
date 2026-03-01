@@ -40,3 +40,10 @@ set_target_properties(SpecSync PROPERTIES
     DEBUG_POSTFIX "d"       # Produces SpecSyncd.lib in debug
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
+
+# DEMO EXECUTABLE
+# Builds an executable named SpecSyncDemo
+add_executable(SpecSyncDemo demo/main.cpp)
+
+# Link the executable to SpecSync static library
+target_link_libraries(SpecSyncDemo PRIVATE SpecSync)
