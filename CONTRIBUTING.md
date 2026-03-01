@@ -1,9 +1,22 @@
-
 # Contributing to SpecSync
 
-First off, thank you for taking the time to contribute! By helping with SpecSync, you are helping game developers ensure their game runs smoothly on any gamer's device, from high-end PCs to handhelds like the Steam Deck.
+First off, thank you for taking the time to contribute! By helping with SpecSync, you are helping game developers ensure their game runs smoothly on any gamer's device.
 
-As an embedded framework, our priority is Zero Impact. SpecSync should never be the reason a game stutters.
+## Licensing and Your Contribution
+
+[cite_start]By contributing to SpecSync, you agree that your contributions will be licensed under the project's **Business Source License 1.1**[cite: 1, 5]. You acknowledge that:
+* [cite_start]The work remains source-available for non-commercial and small-scale individual use[cite: 2, 3].
+* [cite_start]Commercial production use is restricted to those meeting the Additional Use Grant or holding a separate license[cite: 4].
+* [cite_start]The project will transition to the **Apache License 2.0** on the Change Date (2029-01-01).
+
+
+
+## Submitting a Pull Request
+
+1. **Branch:** Create a feature branch (feature/your-feature-name).
+2. **Test:** If you are modifying the Unreal plugin, test it in at least a Blank project.
+3. **Document:** Update the inline Doxygen comments for any new API functions.
+4. **PR Template:** Fill out the PR template, noting the Performance Impact of your change and confirming you accept the BSL 1.1 terms for your contribution.
 
 ## Strategic Areas for Contribution
 

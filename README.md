@@ -1,11 +1,8 @@
-SpecSync
+# SpecSync
 
 The Native, AI-Driven Performance Framework for Games
 
-SpecSync is an open-source, header-only C++ framework designed to be compiled directly into your game. It acts as an **in-process performance engineer**, bridging the gap between hardware constraints and software demands by adjusting engine parameters in real-time.
-
-By moving SpecSync inside the game binary, it gains low-latency access to the render thread and eliminates the need for users to install external background utilities.
-
+SpecSync is a source-available, header-only C++ framework designed to be compiled directly into your game. It acts as an **in-process performance engineer**, bridging the gap between hardware constraints and software demands by adjusting engine parameters in real-time.
 
 Core Features
 
@@ -50,13 +47,22 @@ void VRAMSafetyStrategy::Execute(SpecSyncContext& Context) {
         Context.FlushRenderCommands();
     }
 }
+Licensing
+
+SpecSync is licensed under the **Business Source License 1.1**. 
+
+* [cite_start]**Individual & Non-Commercial Use:** Use is free for educational purposes, non-commercial projects, and individual developers/studios with annual revenue under $50,000 USD[cite: 2].
+* [cite_start]**Commercial Use:** Production use for entities exceeding the revenue threshold requires a separate agreement with the Licensor[cite: 4].
+* [cite_start]**Open Source Conversion:** On **January 1, 2029**, the license for this version of the software will automatically convert to the **Apache License, Version 2.0**.
+
+For full details, please see the [LICENSE] file.
 
 Contributing
 
-SpecSync is 100% Open Source. We are currently looking for help in these "Embedded-First" areas:
+We are actively looking for help in these "Embedded-First" areas:
 
 * **Platform Shims:** Writing telemetry collectors for Linux/Steam Deck and macOS (Metal).
-* **Shader Compilers:** Developing logic to delay certain effects until shaders have finished background compilation to prevent "compilation stutter."
+* **Shader Compilers:** Developing logic to delay certain effects until shaders have finished background compilation.
 * **Math Optimization:** Refining the AI decision tree to run in under $0.5ms$ per frame.
 
-Read the [CONTRIBUTING.md] for more information on how to contibute.
+Read the [CONTRIBUTING.md] for more information on how to contribute.
