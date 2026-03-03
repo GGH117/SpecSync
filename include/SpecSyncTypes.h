@@ -11,9 +11,10 @@ namespace SpecSync {
      */
     struct FrameData {
         float DeltaTime;       // Time since last frame (seconds)
-        float CurrentFPS;      
+        float CurrentFPS;
         float GpuUsage;        // 0.0 to 100.0
         float CpuUsage;        // 0.0 to 100.0
+        float GpuTemp;
         uint64_t AvailableVRAM; // Available video memory (in MB)
     };
 

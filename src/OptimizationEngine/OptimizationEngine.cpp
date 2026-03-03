@@ -5,8 +5,15 @@ namespace SpecSync {
     std::vector<OptimizationCommand> OptimizationEngine::Process(const FrameData& data, float dt) {
         std::vector<OptimizationCommand> commands;
 
-        // PRIORITY: VRAM SAFETY
-        // If VRAM is critical (< 500MB), throttle textures and ignore FPS logic
+        // --- 0. EMERGENCY: THERMAL GUARDRAIL ---
+        // We check this first because safety is the highest priority 
+        if (data.GpuTemp > 85.0f) {
+            m_CurrentScale = 0.50f; // Force 50% resolution to save the hardware
+            commands.push_back({Setting::ResolutionScale, m_CurrentScale});
+            return commands; // Immediate exit: skip FPS/VRAM logic
+        }
+
+        // --- 1. PRIORITY: VRAM SAFETY ---
         if (data.AvailableVRAM < 500) { 
             m_AccumulatedTime += dt;
             if (m_AccumulatedTime >= m_ActionDelay) {
@@ -16,8 +23,7 @@ namespace SpecSync {
             return commands; 
         }
 
-        // SECONDARY: FPS PERFORMANCE
-        // DOWN-SHIFT: FPS is struggling
+        // --- 2. SECONDARY: FPS PERFORMANCE ---
         if (data.CurrentFPS < 57.0f && m_CurrentScale > 0.65f) {
             m_AccumulatedTime += dt;
             if (m_AccumulatedTime >= m_ActionDelay) {
@@ -26,7 +32,6 @@ namespace SpecSync {
                 m_AccumulatedTime = 0.0f;
             }
         } 
-        // UP-SHIFT: Massive performance headroom
         else if (data.CurrentFPS > 75.0f && m_CurrentScale < 1.0f) {
             m_AccumulatedTime += dt;
             if (m_AccumulatedTime >= m_ActionDelay) {
@@ -35,7 +40,6 @@ namespace SpecSync {
                 m_AccumulatedTime = 0.0f;
             }
         } 
-        // STABLE: Reset timer
         else {
             m_AccumulatedTime = 0.0f;
         }

@@ -10,6 +10,7 @@ add_library(SpecSync STATIC
     src/HardwareScanner/HardwareScanner.cpp
     src/Telemetry/Telemetry.cpp
     src/OptimizationEngine/OptimizationEngine.cpp
+    src/SettingsRegistry/SettingsRegistry.cpp
 )
 
 # Configure Include Directories

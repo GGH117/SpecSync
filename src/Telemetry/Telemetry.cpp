@@ -13,12 +13,12 @@ static PDH_HCOUNTER cpuTotal;
 namespace SpecSync {
 
     Telemetry::Telemetry() : TimeSinceLastGpuQuery(0.0f) {
-        CurrentFrame = {0.0f, 0.0f, 0.0f, 0.0f, 0};
-        
-        // Initialize PDH for CPU tracking
-        PdhOpenQuery(NULL, NULL, &cpuQuery);
-        PdhAddEnglishCounter(cpuQuery, L"\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal);
-        PdhCollectQueryData(cpuQuery);
+    // Order: DeltaTime, CurrentFPS, CpuUsage, GpuUsage, GpuTemp, AvailableVRAM
+    CurrentFrame = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0};
+    
+    PdhOpenQuery(NULL, NULL, &cpuQuery);
+    PdhAddEnglishCounter(cpuQuery, L"\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal);
+    PdhCollectQueryData(cpuQuery);
     }
 
     Telemetry::~Telemetry() {
@@ -41,29 +41,27 @@ namespace SpecSync {
         }
     }
 
-    void Telemetry::UpdateHardwareStats() {
-        // GPU Stats via DXGI
-        ComPtr<IDXGIFactory4> factory;
-        if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(&factory)))) {
-            ComPtr<IDXGIAdapter1> adapter;
-            if (SUCCEEDED(factory->EnumAdapters1(0, &adapter))) {
-                ComPtr<IDXGIAdapter3> adapter3;
-                if (SUCCEEDED(adapter.As(&adapter3))) {
-                    DXGI_QUERY_VIDEO_MEMORY_INFO memInfo;
-                    if (SUCCEEDED(adapter3->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo))) {
-                        CurrentFrame.AvailableVRAM = (memInfo.Budget - memInfo.CurrentUsage) / 1024 / 1024;
-                        CurrentFrame.GpuUsage = ((float)memInfo.CurrentUsage / (float)memInfo.Budget) * 100.0f;
-                    }
-                }
-            }
+   void Telemetry::UpdateHardwareStats() {
+    // --- 1. GPU Memory Logic (DXGI) ---
+    ComPtr<IDXGIFactory4> factory;
+    if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(&factory)))) {
+        // ... (Your existing adapter and memInfo code) ...
+        if (SUCCEEDED(adapter3->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo))) {
+            CurrentFrame.AvailableVRAM = (memInfo.Budget - memInfo.CurrentUsage) / 1024 / 1024;
+            CurrentFrame.GpuUsage = ((float)memInfo.CurrentUsage / (float)memInfo.Budget) * 100.0f;
         }
-
-        // CPU Stats via PDH
-        PDH_FMT_COUNTERVALUE counterVal;
-        PdhCollectQueryData(cpuQuery);
-        PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_DOUBLE, NULL, &counterVal);
-        CurrentFrame.CpuUsage = (float)counterVal.doubleValue;
     }
+
+    // --- 2. CPU Usage Logic (PDH) ---
+    PDH_FMT_COUNTERVALUE counterVal;
+    PdhCollectQueryData(cpuQuery);
+    PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_DOUBLE, NULL, &counterVal);
+    CurrentFrame.CpuUsage = (float)counterVal.doubleValue;
+
+    // --- 3. THERMAL DATA (MOCK) ---
+    // PLACE IT HERE: This ensures every time telemetry updates, it has a temp value.
+    CurrentFrame.GpuTemp = 60.0f; 
+}
 
     float Telemetry::GetAverageFPS() const {
         if (FpsHistory.empty()) return 0.0f;

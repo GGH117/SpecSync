@@ -7,11 +7,11 @@
 - [ ] **Dependencies:** Does this add any new third-party libraries?
 
 ### License Acknowledgement
-[cite_start]SpecSync is currently licensed under the **Business Source License 1.1**, converting to **Apache 2.0** on 2029-01-01[cite: 1, 6]. By submitting this contribution, you agree to the following:
+SpecSync is currently licensed under the **Business Source License 1.1**, converting to **Apache 2.0** on 2029-01-01[cite: 1, 6]. By submitting this contribution, you agree to the following:
 
-- [ ] [cite_start]I acknowledge that my contribution will be governed by the **Business Source License 1.1** as defined in the project's `LICENSE` file.
-- [ ] [cite_start]I understand that while the software is source-available for non-commercial and small-scale use (<$50k USD revenue), commercial production use requires a separate agreement with the Licensor[cite: 2, 4].
-- [ ] [cite_start]I agree that on the Change Date (2029-01-01), my contribution will transition to the **Apache License, Version 2.0** alongside the rest of the Licensed Work[cite: 6].
+- [ ] I acknowledge that my contribution will be governed by the **Business Source License 1.1** as defined in the project's `LICENSE` file.
+- [ ] I understand that while the software is source-available for non-commercial and small-scale use (<$50k USD revenue), commercial production use requires a separate agreement with the Licensor[cite: 2, 4].
+- [ ] I agree that on the Change Date (2029-01-01), my contribution will transition to the **Apache License, Version 2.0** alongside the rest of the Licensed Work.
 
 ### Type of Change
 - [ ] Platform Shim (Windows/Linux/Console)
