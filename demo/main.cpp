@@ -12,15 +12,20 @@ int main() {
     SpecSync::OptimizationEngine optimizer;
     SpecSync::SettingsRegistry registry;
 
-    // Register Engine Callbacks
+    // Register Handlers
     registry.BindSetting(SpecSync::Setting::ResolutionScale, [](float val) {
-        std::cout << "\n[ENGINE] Setting r.ScreenPercentage to " << (val * 100) << "\n";
+        std::cout << "\n[ENGINE] Engine Scaling Resolution to: " << (val * 100) << "%\n";
+    });
+    
+    registry.BindSetting(SpecSync::Setting::TextureStreamingBudget, [](float val) {
+        std::cout << "\n[ENGINE] Engine Dropping Texture Budget to: " << (val * 100) << "%\n";
     });
 
     float deltaTime = 0.1f;
-    std::cout << "SpecSync Active: System Architecture - Library Model\n";
+    std::cout << "SpecSync Active (Threaded & Cross-Platform)\n-------------------------------------------\n";
 
-    while (true) {
+    // Run a 20-second simulated game loop
+    for (int i = 0; i < 200; ++i) {
         telemetry.Tick(deltaTime);
         auto data = telemetry.GetLatestData();
         auto commands = optimizer.Process(data, deltaTime);
@@ -30,12 +35,14 @@ int main() {
         std::cout << "\r" 
                   << "CPU: " << std::setw(3) << (int)data.CpuUsage << "% | "
                   << "GPU: " << std::setw(3) << (int)data.GpuUsage << "% | "
+                  << "Temp: " << (int)data.GpuTemp << "C | "
                   << "VRAM: " << std::setw(4) << data.AvailableVRAM << "MB | "
-                  << "FPS: " << std::setw(3) << (int)data.CurrentFPS << " | "
-                  << "TEMP: " << (int)data.GpuTemp << "C   ";
+                  << "FPS: " << std::setw(3) << (int)data.CurrentFPS << "   ";
         
         std::cout.flush();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+    
+    std::cout << "\n\nSimulation Complete. Safe Exit.\n";
     return 0;
 }
