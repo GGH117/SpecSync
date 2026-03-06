@@ -1,27 +1,27 @@
 #pragma once
 #include "SpecSyncTypes.h"
 #include <vector>
+#include <thread>
+#include <atomic>
 
 namespace SpecSync {
     class Telemetry {
     public:
-        Telemetry();  // Constructor
-        ~Telemetry(); // Destructor
+        Telemetry();
+        ~Telemetry();
 
         void Tick(float dt);
         FrameData GetLatestData() const;
 
     private:
-        // Internal Helpers
-        float GetAverageFPS() const;
         void UpdateHardwareStats();
+        void BackgroundThreadLoop();
+        float GetAverageFPS() const;
 
-        // Data Storage
         FrameData CurrentFrame;
         std::vector<float> FpsHistory;
         
-        // Timers
-        float TimeSinceLastGpuQuery;
-        const float GpuQueryInterval = 1.0f; // Query hardware once per second
+        std::atomic<bool> m_IsRunning;
+        std::thread m_WorkerThread;
     };
 }
