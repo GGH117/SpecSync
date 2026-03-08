@@ -1,18 +1,13 @@
 #pragma once
 #include "SpecSyncTypes.h"
-#include <functional>
-#include <unordered_map>
-#include <vector>
+#include <map>
 
 namespace SpecSync {
-    using SettingCallback = std::function<void(float)>;
-
     class SettingsRegistry {
     public:
-        void BindSetting(Setting target, SettingCallback callback);
-        void ExecuteCommands(const std::vector<OptimizationCommand>& commands);
-
+        void UpdateSetting(Setting setting, float value);
+        float GetSetting(Setting setting);
     private:
-        std::unordered_map<Setting, SettingCallback> m_Callbacks;
+        std::map<Setting, float> m_Settings;
     };
 }

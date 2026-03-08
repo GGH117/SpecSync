@@ -5,11 +5,13 @@
 namespace SpecSync {
     class OptimizationEngine {
     public:
+        OptimizationEngine() : m_CurrentScale(1.0f), m_AccumulatedTime(0.0f) {}
+        
+        // This MUST be named 'Process' to match the bridge
         std::vector<OptimizationCommand> Process(const FrameData& data, float dt);
 
     private:
-        float m_CurrentScale = 1.0f;
-        float m_AccumulatedTime = 0.0f;
-        const float m_ActionDelay = 2.0f; 
+        float m_CurrentScale;
+        float m_AccumulatedTime;
     };
 }
