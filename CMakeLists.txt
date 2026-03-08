@@ -3,30 +3,38 @@ project(SpecSync)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# 1. Define Core Sources
+# Define Core Sources
 set(SPECSYNC_SOURCES
     src/Telemetry/Telemetry.cpp
     src/OptimizationEngine/OptimizationEngine.cpp
     src/SettingsRegistry/SettingsRegistry.cpp
 )
 
-# 2. Add Linux-Specific Sources if not on Windows
-if(NOT WIN32)
+# Platform Logic
+if(WIN32)
+    add_definitions(-DPLATFORM_WINDOWS)
+else()
     list(APPEND SPECSYNC_SOURCES src/Telemetry/LinuxShim.cpp)
     add_definitions(-DPLATFORM_LINUX)
 endif()
 
-# 3. Build the Library
+# Build Library
 add_library(SpecSync STATIC ${SPECSYNC_SOURCES})
 
-# 4. Link Dependencies
-find_package(Threads REQUIRED)
-target_link_libraries(SpecSync PRIVATE Threads::Threads) # Threading required on all OS
-
+# Link Hardware APIs
 if(WIN32)
     target_link_libraries(SpecSync PRIVATE dxgi.lib pdh.lib)
 endif()
 
-# 5. Build Demo
-add_executable(SpecSyncDemo demo/main.cpp)
-target_link_libraries(SpecSyncDemo PRIVATE SpecSync)
+# FETCH PYBIND11 (Fixes the "file not found" error)
+include(FetchContent)
+FetchContent_Declare(
+  pybind11
+  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+  GIT_TAG        v2.11.1
+)
+FetchContent_MakeAvailable(pybind11)
+
+# Build the Python Bridge
+pybind11_add_module(SpecSyncBridge ui/bridge/SpecSyncBridge.cpp)
+target_link_libraries(SpecSyncBridge PRIVATE SpecSync)

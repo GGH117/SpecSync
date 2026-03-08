@@ -8,7 +8,7 @@ namespace SpecSync {
         float GetGpuTemp();
         float GetCpuUsage();
         
-        // New VRAM methods for Linux/Steam Deck
+        // VRAM methods for Linux/Steam Deck
         uint32_t GetAvailableVRAM();
         float GetGpuUsage();
 

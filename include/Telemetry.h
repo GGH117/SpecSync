@@ -9,7 +9,6 @@ namespace SpecSync {
     public:
         Telemetry();
         ~Telemetry();
-
         void Tick(float dt);
         FrameData GetLatestData() const;
 
@@ -20,7 +19,6 @@ namespace SpecSync {
 
         FrameData CurrentFrame;
         std::vector<float> FpsHistory;
-        
         std::atomic<bool> m_IsRunning;
         std::thread m_WorkerThread;
     };

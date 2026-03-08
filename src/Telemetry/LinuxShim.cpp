@@ -10,7 +10,7 @@ LinuxShim::LinuxShim() {
 }
 
 void LinuxShim::FindHardwarePaths() {
-    // 1. Find Thermal Path (amdgpu for Steam Deck/AMD)
+    // Find Thermal Path (amdgpu for Steam Deck/AMD)
     if (std::filesystem::exists("/sys/class/hwmon")) {
         for (const auto& entry : std::filesystem::directory_iterator("/sys/class/hwmon")) {
             std::ifstream nameFile(entry.path().string() + "/name");
@@ -22,7 +22,7 @@ void LinuxShim::FindHardwarePaths() {
         }
     }
 
-    // 2. Find DRM VRAM Paths
+    // Find DRM VRAM Paths
     std::string drmPath = "/sys/class/drm/card0/device/";
     if (std::filesystem::exists(drmPath + "mem_info_vram_total")) {
         m_VramTotalPath = drmPath + "mem_info_vram_total";
@@ -77,4 +77,4 @@ float LinuxShim::GetCpuUsage() {
     return 0.0f;
 }
 
-} // namespace SpecSync
+}

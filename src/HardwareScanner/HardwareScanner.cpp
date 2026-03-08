@@ -8,9 +8,9 @@
     #pragma comment(lib, "dxgi.lib")
 #else
     // ONLY included on Linux/Vulkan where they are used
-    #include <vector>   // For VkPhysicalDevice list
+    #include <vector>   // For storing Vulkan devices
     #include <fstream>  // For reading /proc/cpuinfo
-    #include <sstream>  // For parsing cpuinfo text
+    #include <sstream>  // For parsing CPU info
     #include <vulkan/vulkan.h>
     #include <unistd.h>
 #endif
@@ -43,7 +43,7 @@ namespace SpecSync {
         OutProfile.CpuLogicalCores = std::thread::hardware_concurrency();
 
 #ifdef _WIN32
-        // Get CPU Brand String via __cpuid
+        // Get CPU Brand String using CPUID
         int cpuInfo[4] = { -1 };
         char cpuBrandString[48];
         __cpuid(cpuInfo, 0x80000002);
@@ -54,7 +54,7 @@ namespace SpecSync {
         memcpy(cpuBrandString + 32, cpuInfo, sizeof(cpuInfo));
         OutProfile.CpuName = cpuBrandString;
 #else
-        // Read CPU name from /proc/cpuinfo on Linux
+        // Read CPU name from /proc/cpuinfo
         std::ifstream cpuinfo("/proc/cpuinfo");
         std::string line;
         while (std::getline(cpuinfo, line)) {
@@ -88,7 +88,7 @@ namespace SpecSync {
             pFactory->Release();
         }
 #else
-        // Vulkan implementation for Linux (as detailed in previous step)
+        // Vulkan implementation for Linux to get GPU info
         VkInstanceCreateInfo createInfo = { VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
         VkInstance instance;
         if (vkCreateInstance(&createInfo, nullptr, &instance) == VK_SUCCESS) {
