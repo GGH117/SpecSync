@@ -1,19 +1,17 @@
 #include "../../include/SettingsRegistry.h"
-#include <iostream>
 
 namespace SpecSync {
-    void SettingsRegistry::BindSetting(Setting target, SettingCallback callback) {
-        m_Callbacks[target] = callback;
+    
+    void SettingsRegistry::UpdateSetting(Setting setting, float value) {
+        m_Settings[setting] = value;
     }
 
-    void SettingsRegistry::ExecuteCommands(const std::vector<OptimizationCommand>& commands) {
-        for (const auto& cmd : commands) {
-            auto it = m_Callbacks.find(cmd.TargetSetting);
-            if (it != m_Callbacks.end()) {
-                it->second(cmd.TargetValue);
-            } else {
-                std::cerr << "[SpecSync Warning] Tried to execute command for unbound setting.\n";
-            }
+    float SettingsRegistry::GetSetting(Setting setting) {
+        auto it = m_Settings.find(setting);
+        if (it != m_Settings.end()) {
+            return it->second;
         }
+        return 0.0f; // Default fallback if the setting hasn't been written yet
     }
-}
+
+} // namespace SpecSync

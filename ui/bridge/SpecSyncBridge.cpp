@@ -32,6 +32,5 @@ PYBIND11_MODULE(SpecSyncBridge, m) {
 
     py::class_<SpecSync::OptimizationEngine>(m, "OptimizationEngine")
         .def(py::init<>())
-        // Linked to the 'Process' function in the header
         .def("Process", &SpecSync::OptimizationEngine::Process);
 }

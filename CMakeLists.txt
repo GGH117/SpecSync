@@ -20,6 +20,7 @@ endif()
 
 # Build Library
 add_library(SpecSync STATIC ${SPECSYNC_SOURCES})
+target_include_directories(SpecSync PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link Hardware APIs
 if(WIN32)
