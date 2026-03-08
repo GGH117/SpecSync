@@ -18,33 +18,6 @@ This is a developer-focused alpha. The core C++ engine and Python communication 
 
 ## Prerequisites
 Before building, ensure you have the following installed:
-* **Python 3.13.x** The bridge is linked to this version
+* **Python 3.13.x** 
 * **CMake 3.15+**
-* **C++20 Compliant Compiler** Visual Studio 2022 recommended for Windows
-
----
-
-##  Build Instructions
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/SpecSync.git](https://github.com/your-username/SpecSync.git)
-   cd SpecSync
-Run the Build:
-
-Bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-Locate the Bridge:
-After a successful build, your Python module SpecSyncBridge.cp313-win_amd64.pyd will be located in /build/Release.
-
-# Project Architecture
-/src: Core C++ implementation (Telemetry, Engine, Registry).
-
-/include: Public headers for integration.
-
-/ui/bridge: PyBind11 source for the Python module.
-
-/build: (Generated) Compiled binaries and project files.
+* **C++20 Compliant Compiler**
